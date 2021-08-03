@@ -24,5 +24,24 @@ body { padding-bottom: 70px; }
 .custom-login{
     margin-top:100px;
 }
+img.slider-img{
+    height:400px !important;
+}
+.slider-text{
+    background-color: #35443585 !important;
+}
+.trending-image{
+    height: 100px;
+}
+.trending-item{
+    float: left;
+    width: 25%;
+}
+.trending-wrapper{
+    margin-left: 30px;
+}
+.detail-img{
+    height: 200px;
+}
 </style>
 </html>
