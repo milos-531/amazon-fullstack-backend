@@ -49,6 +49,7 @@ if(Session::has('user')){
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Session::get('user')['name']}}<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/logout">Logout</a></li>
+            <li><a href="/rename">Rename</a></li>
           </ul>
         </li>
         @else

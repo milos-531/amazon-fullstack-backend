@@ -25,8 +25,10 @@ Route::get('/logout', function () {
 });
 
 Route::view('/register','register');
+Route::view('/rename','rename');
 Route::post('/login',[UserController::class,'login']);
 Route::post('/register',[UserController::class,'register']);
+Route::put('/changename',[UserController::class,'changename']);
 Route::get("/",[ProductController::class,'index']);
 Route::get("/detail/{id}",[ProductController::class,'detail']);
 Route::post('/add_to_cart',[ProductController::class,'addToCart']);

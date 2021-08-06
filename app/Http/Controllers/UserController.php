@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Contracts\Session\Session as SessionSession;
+use Session;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -27,5 +30,19 @@ class UserController extends Controller
         $user->password = Hash::make($req->password);
         $user->save();
         return redirect('/login');
+    }
+    function changename(Request $req){
+        
+        $userId = Session::get('user')['id'];
+
+        DB::table('users')
+              ->where('id', $userId)
+              ->update(['name' => $req->name]);
+
+        $user = User::where(['id' => $userId])->first();
+        
+        
+        $req->session()->put('user',$user);
+        return redirect('/');
     }
 }
