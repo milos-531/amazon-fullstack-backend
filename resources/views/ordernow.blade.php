@@ -35,9 +35,6 @@
                     <input type="radio" value="cash" name="payment" required><span>Payment on Delivery</span> <br><br>
 
                 </div>
-                <div class="checkbox">
-                    <label><input type="checkbox"> Remember me</label>
-                </div>
                 <button type="submit" class="btn btn-default">Order Now</button>
             </form>
         </div>
