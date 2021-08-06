@@ -23,15 +23,16 @@
             </tbody>
         </table>
         <div>
-            <form action="/action_page.php">
+            <form action="/orderplace" method="POST">
+                @csrf
                 <div class="form-group">
-                    <textarea type="email" placeholder="Enter your address..." class="form-control"></textarea>
+                    <textarea name="address" placeholder="Enter your address..." class="form-control" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="pwd">Payment method</label> <br><br>
-                    <input type="radio" name="payment"><span>Online payment</span>  <br><br>
-                    <input type="radio" name="payment"><span>EMI payment</span> <br><br>
-                    <input type="radio" name="payment"><span>Payment on Delivery</span> <br><br>
+                    <input type="radio" value="cash" name="payment" required><span>Online payment</span>  <br><br>
+                    <input type="radio" value="cash" name="payment" required><span>EMI payment</span> <br><br>
+                    <input type="radio" value="cash" name="payment" required><span>Payment on Delivery</span> <br><br>
 
                 </div>
                 <div class="checkbox">
