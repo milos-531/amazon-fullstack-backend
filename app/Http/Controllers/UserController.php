@@ -24,6 +24,11 @@ class UserController extends Controller
     }
     function register(Request $req){
         
+        $existing = User::where('email',$req->email)->first();
+        if($existing){
+            return redirect('/register');
+        }
+
         $user = new User;
         $user->name = $req->name;
         $user->email = $req->email;
