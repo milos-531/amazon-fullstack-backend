@@ -3,6 +3,7 @@
 <div class="custom-product">
     <div class="col-sm-10">
         <div class="trending-wrapper">
+            @if($products->count() > 0)
             <h4>Result for Products</h4>
             <a class="btn btn-success" href="/ordernow">Order now</a> <br><br>
             @foreach($products as $item)
@@ -24,6 +25,9 @@
                 </div>
             </div>
             @endforeach
+            @else
+            <h1>No products here currently</h1>
+            @endif
         </div>
 
     </div>

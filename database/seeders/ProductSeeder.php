@@ -40,12 +40,28 @@ class ProductSeeder extends Seeder
                 "image"=>"https://4.imimg.com/data4/PM/KH/MY-34794816/lcd-500x500.png"
             ],
             [
-                'name'=>'LG fridge',
-                "price"=>"200",
-                "description"=>"A fridge with much more feature",
-                "category"=>"fridge",
+                'name'=>"Dubliners: Centennial Edition (Penguin Classics Deluxe Edition)",
+                "price"=>"8",
+                "description"=>"Special edition of Joyce's most famous work.",
+                "category"=>"books",
+                "rating" =>"5",
+                "image"=>"https://images-na.ssl-images-amazon.com/images/I/51ySJimFL4L._SX331_BO1,204,203,200_.jpg"
+            ],
+             [
+                'name'=>'The Best of Fyodor Dostoevsky',
+                "price"=>"34.99",
+                "description"=>"The best works of Fyodor Dostoevsky. Including The Idiot, Crime and Punishment, and many more.",
+                "category"=>"books",
+                "rating" =>"5",
+                "image"=>"https://images-na.ssl-images-amazon.com/images/I/41Z15h9JmmL._SY498_BO1,204,203,200_.jpg"
+             ],
+             [
+                'name'=>'Nintendo Switch',
+                "price"=>"274.49",
+                "description"=>"Nintendo Switch with Neon Blue and Neon Red Joy‑Con - HAC-001(-01)",
+                "category"=>"gaming",
                 "rating" =>"4",
-                "image"=>"https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTFx-2-wTOcfr5at01ojZWduXEm5cZ-sRYPJA&usqp=CAU"
+                "image"=>"https://m.media-amazon.com/images/I/61-PblYntsL._AC_SX466_.jpg"
              ]
         ]);
     }

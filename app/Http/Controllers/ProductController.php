@@ -54,7 +54,11 @@ class ProductController extends Controller
         Cart::destroy($id);
         return redirect('/cartlist');
     }
-
+    function removeOrder($productId){
+        $userId = Session::get('user')['id'];
+        Order::where('user_id',$userId)->where('product_id',$productId)->first()->delete();
+        return redirect('/myorders');
+    }
     function orderNow(){
         $userId = Session::get('user')['id'];
         $total = DB::table('cart')
