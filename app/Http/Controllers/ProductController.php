@@ -22,17 +22,17 @@ class ProductController extends Controller
     }
 
     function addToCart(Request $req){
-        if($req->session()->has('user')){
 
+        try {
             $cart = new Cart;
-            $cart->user_id = $req->session()->get('user')['id'];
+            $cart->user_id = $req->user_id;
             $cart->product_id = $req->product_id;
             $cart->save();
-            return redirect('/');
+            return $cart;
+        } catch (\Throwable $th) {
+                return 0;
         }
-        else {
-            return redirect('/login');
-        }
+
     }
     
     static function cartItem(){
@@ -40,15 +40,14 @@ class ProductController extends Controller
         return Cart::where('user_id',$userId)->count();
     }
 
-    function cartList(){
+    function cartList($userId){
        
-        $userId = Session::get('user')['id'];
         $products = DB::table('cart')
         ->join('products','cart.product_id','=','products.id')
         ->where('cart.user_id',$userId)
         ->select('products.*','cart.id as cart_id')
         ->get();
-        return view('cartlist',['products'=>$products]); 
+        return $products; 
     }
     function removeCart($id){
         Cart::destroy($id);
