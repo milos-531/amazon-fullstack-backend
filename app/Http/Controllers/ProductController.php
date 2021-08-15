@@ -49,14 +49,34 @@ class ProductController extends Controller
         ->get();
         return $products; 
     }
-    function removeCart($id){
-        Cart::destroy($id);
-        return redirect('/cartlist');
+    function getProducts($top){
+       
+        $products = DB::table('products')->limit($top)->get();
+        return $products; 
     }
-    function removeOrder($productId){
-        $userId = Session::get('user')['id'];
-        Order::where('user_id',$userId)->where('product_id',$productId)->first()->delete();
-        return redirect('/myorders');
+    function search($req){
+        $key = strtolower($req);
+        $products = DB::table('products')->whereRaw("LOWER(name) LIKE '%".$key."%'")
+        ->orWhereRaw("LOWER(description) LIKE '%".$key."%'")
+        ->orWhereRaw("LOWER(category) LIKE '%".$key."%'")->get();
+        return $products; 
+    }
+    function removeCart(Request $req){
+        try {
+            Cart::where("user_id", $req->user_id)->where("product_id", $req->product_id)->first()->delete();
+            return 1;
+        } catch (\Throwable $th) {
+            return $th;
+        }
+    }
+    function removeOrder(Request $req){
+        try {
+            Order::where('user_id',$req->user_id)->where('product_id',$req->product_id)->first()->delete();
+            return 1;
+        } catch (\Throwable $th) {
+            return 0;
+        }
+        
     }
     function orderNow(){
         $userId = Session::get('user')['id'];
@@ -68,29 +88,34 @@ class ProductController extends Controller
     }
     function orderPlace(Request $req){
 
-      
-        $userId = Session::get('user')['id'];
-        $allCart = Cart::where('user_id',$userId)->get();
-        foreach($allCart as $cart){
-
-            $order = new Order;
-            $order->product_id = $cart['product_id'];
-            $order->user_id = $cart['user_id'];
-            $order->status = "pending";
-            $order->payment_method = $req->payment;
-            $order->payment_status = "pending";
-            $order->address = $req->address;
-            $order->save();
-            Cart::where('user_id',$userId)->delete();
+        try {
+            $userId = $req->user_id;
+            $allCart = Cart::where('user_id',$userId)->get();
+            if(count($allCart) == 0)
+                return 0;
+            foreach($allCart as $cart){
+    
+                $order = new Order;
+                $order->product_id = $cart['product_id'];
+                $order->user_id = $cart['user_id'];
+                $order->status = "pending";
+                $order->payment_method = $req->payment;
+                $order->payment_status = "pending";
+                $order->address = $req->address;
+                $order->save();
+                Cart::where('user_id',$userId)->delete();
+            }
+            return 1;
+        } catch (\Throwable $th) {
+            return 0;
         }
-        return redirect('/');
+
     }
-    function myOrders(){
-        $userId = Session::get('user')['id'];
+    function getOrders($user_id){
         $orders = DB::table('orders')
         ->join('products','orders.product_id','=','products.id')
-        ->where('orders.user_id',$userId)
+        ->where('orders.user_id',$user_id)
         ->get();
-        return view('myorders',['orders'=>$orders]); 
+        return $orders; 
     }
 }
