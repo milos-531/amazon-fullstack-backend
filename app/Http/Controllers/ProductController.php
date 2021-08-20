@@ -6,20 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Order;
-use Session;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    function index(){
-        $data = Product::all();
-        return view('product',['products' => $data]);
-    }
-
-    function detail($id){
-        $data = Product::find($id);
-        return view('detail',['product'=>$data]);
-    }
 
     function addToCart(Request $req){
 
@@ -35,11 +26,6 @@ class ProductController extends Controller
 
     }
     
-    static function cartItem(){
-        $userId = Session::get('user')['id'];
-        return Cart::where('user_id',$userId)->count();
-    }
-
     function cartList($userId){
        
         $products = DB::table('cart')
@@ -53,6 +39,26 @@ class ProductController extends Controller
        
         $products = DB::table('products')->limit($top)->get();
         return $products; 
+    }
+    function getAllProducts($user_id){
+       
+        $user = User::where("id", $user_id)->first();
+        if($user->role != "admin"){
+            return -1;
+        }
+        $products = DB::table('products')->get();
+        return $products; 
+    }
+    function getAllOrders($user_id){
+       
+        $user = User::where("id", $user_id)->first();
+        if($user->role != "admin"){
+            return -1;
+        }
+        $orders = DB::table('orders')
+        ->join('users','orders.user_id','=','users.id')
+        ->join('products','orders.product_id','=','products.id')->get();
+        return $orders; 
     }
     function search($req){
         $key = strtolower($req);
@@ -77,14 +83,6 @@ class ProductController extends Controller
             return 0;
         }
         
-    }
-    function orderNow(){
-        $userId = Session::get('user')['id'];
-        $total = DB::table('cart')
-        ->join('products','cart.product_id','=','products.id')
-        ->where('cart.user_id',$userId)
-        ->sum('products.price');
-        return view('ordernow',['total'=>$total]); 
     }
     function orderPlace(Request $req){
 
@@ -117,5 +115,53 @@ class ProductController extends Controller
         ->where('orders.user_id',$user_id)
         ->get();
         return $orders; 
+    }
+    function updateOrder(Request $req){
+
+        try {
+            $order = Order::where('product_id', $req->product_id)->where('user_id',$req->user_id)->first();
+
+            $order->payment_status = $req->payment_status;      
+            $order->status = $req->status;
+            if($req->status == "cancelled"){
+                $order->payment_status = "cancelled";
+            }   
+            $order->save();
+
+            $orders = DB::table('orders')
+            ->join('users','orders.user_id','=','users.id')
+            ->join('products','orders.product_id','=','products.id')->get();
+            return $orders; 
+        } catch (\Throwable $th) {
+            return $th;
+        }
+
+    }
+    function removeProduct($id){
+        Product::where('id', $id)->delete();
+
+        $products = DB::table('products')->get();
+        return $products; 
+    }
+    function addProduct(Request $req){
+        
+        try {
+            $existing = Product::where("name", $req->name)->first();
+            if($existing){
+                return -2;
+            }
+            $product = new Product();
+            $product->name = $req->name;
+            $product->category = $req->category;
+            $product->description = $req->description;
+            $product->price = $req->pricef;
+            $product->rating = $req->rating;
+            $product->image = $req->image;
+    
+            $product->save(); 
+        } catch (\Throwable $th) {
+            return -1;
+        }
+
     }
 }
