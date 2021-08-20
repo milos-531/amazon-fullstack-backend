@@ -61,10 +61,10 @@ class ProductController extends Controller
         return $orders; 
     }
     function search($req){
-        $key = strtolower($req);
-        $products = DB::table('products')->whereRaw("LOWER(name) LIKE '%".$key."%'")
-        ->orWhereRaw("LOWER(description) LIKE '%".$key."%'")
-        ->orWhereRaw("LOWER(category) LIKE '%".$key."%'")->get();
+        $key = '%'.strtolower($req).'%';
+        $products = DB::table('products')->whereRaw("LOWER(name) LIKE ?",[$key,])
+        ->orWhereRaw("LOWER(description) LIKE ?",[$key])
+        ->orWhereRaw("LOWER(category) LIKE ?",[$key])->get();
         return $products; 
     }
     function removeCart(Request $req){
