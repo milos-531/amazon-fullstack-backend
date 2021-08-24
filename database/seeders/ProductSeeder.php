@@ -62,6 +62,15 @@ class ProductSeeder extends Seeder
                 "category"=>"gaming",
                 "rating" =>"4",
                 "image"=>"https://m.media-amazon.com/images/I/61-PblYntsL._AC_SX466_.jpg"
+             ],
+             [
+                'name'=>"Victrola Vintage 3-Speed Bluetooth Portable Suitcase Record Player with Built-in Speakers",
+                "price"=>"53.38",
+                "description"=>"Upgraded Turntable Audio Sound| Includes Extra Stylus | Turquoise, Model Number: VSC-550BT-TQ",
+                "rating" =>"4",
+                "category"=>"music",
+                "image"=>"https://m.media-amazon.com/images/I/71ZL0B3kwhS._AC_SX679_.jpg"
+
              ]
         ]);
     }

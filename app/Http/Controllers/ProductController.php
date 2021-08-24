@@ -138,8 +138,13 @@ class ProductController extends Controller
 
     }
     function removeProduct($id){
+        $existingOrder = Order::where('product_id',$id)->where('status','pending')->first();
+        if($existingOrder){
+            return -1;
+        }
         Product::where('id', $id)->delete();
-
+        Order::where('product_id',$id)->delete();
+        Cart::where('product_id',$id)->delete();
         $products = DB::table('products')->get();
         return $products; 
     }
@@ -159,6 +164,7 @@ class ProductController extends Controller
             $product->image = $req->image;
     
             $product->save(); 
+            return 1;
         } catch (\Throwable $th) {
             return -1;
         }
